@@ -1,1 +1,1 @@
-# node-hello-world
+# Conference server

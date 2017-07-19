@@ -1,29 +1,27 @@
-/*eslint-env node*/
+var express = require('express'),
+    bodyParser      = require('body-parser'),
+    methodOverride  = require('method-override'),
+    sessions        = require('./routes/sessions'),
+    app = express();
 
-//------------------------------------------------------------------------------
-// hello world app is based on node.js starter application for Bluemix
-//------------------------------------------------------------------------------
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use(methodOverride());      // simulate DELETE and PUT
 
-// This application uses express as its web server
-// for more info, see: http://expressjs.com
-var express = require('express');
+// CORS (Cross-Origin Resource Sharing) headers to support Cross-site HTTP requests
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    next();
+});
 
-// cfenv provides access to your Cloud Foundry environment
-// for more info, see: https://www.npmjs.com/package/cfenv
-var cfenv = require('cfenv');
+app.get('/sessions', sessions.findAll);
+app.get('/sessions/:id', sessions.findById);
 
-// create a new express server
-var app = express();
+app.set('port', process.env.PORT || 5000);
 
-// serve the files out of ./public as our main files
-app.use(express.static(__dirname + '/public'));
-
-// get the app environment from Cloud Foundry
-var appEnv = cfenv.getAppEnv();
-
-// start server on the specified port and binding host
-app.listen(appEnv.port, '0.0.0.0', function() {
-
-	// print a message when the server starts listening
-  console.log("server starting on " + appEnv.url);
+app.listen(app.get('port'), function () {
+    console.log('Express server listening on port ' + app.get('port'));
 });
