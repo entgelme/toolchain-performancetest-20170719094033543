@@ -1,4 +1,4 @@
 applications:
-- name: SimpleServer
+- name: SimpleServer-ae
   memory: 128M
   buildpack: sdk-for-nodejs
