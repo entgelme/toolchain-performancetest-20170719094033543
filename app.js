@@ -17,6 +17,7 @@ app.all('*', function(req, res, next) {
     next();
 });
 
+app.get('/', sessions.findAll);
 app.get('/sessions', sessions.findAll);
 app.get('/sessions/:id', sessions.findById);
 
